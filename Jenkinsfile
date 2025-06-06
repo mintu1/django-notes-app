@@ -13,7 +13,7 @@ pipeline{
         stage("code"){
             steps{
                 script{
-                    clone("https://github.com/LondheShubham153/django-notes-app.git", "main")
+                    clone("https://github.com/mintu1/django-notes-app.git, "main")
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline{
         stage("Deploy"){
             steps{
                 echo "this is for deploying the code"
-                sh "docker compose up -d" 
+                sh "docker compose up -d"
             }
         }
     }
