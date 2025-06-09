@@ -1,6 +1,14 @@
 @Library("shared") _
 pipeline{
     agent any
+
+    tools {
+        jdk 'jdk8'
+        maven 'maven3'
+    }
+    environment {
+        SCANNER_HOME = tool 'Sonar'
+    }
     
     stages{
         stage("hello"){
@@ -15,6 +23,27 @@ pipeline{
                 script{
                     clone("https://github.com/mintu1/django-notes-app.git", "main")
                 }
+            }
+        }
+
+        stage("Trivy"){
+            steps{
+                sh "trivy fs ."
+            }
+        }
+        stage("compile"){
+            steps{
+                sh "mvn compile"
+            }
+        }
+        stage("Test"){
+            steps{
+                sh "mvn test"
+            }
+        }
+        stage('File System Scan') {
+            steps {
+                sh "trivy fs --format table -o trivy-fs-report.html ."
             }
         }
         stage("Build"){
